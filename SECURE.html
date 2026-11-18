@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SecureDigital - 차세대 AI 보안 플랫폼</title>
+    <title>SecureDigital - 파일 지문 분석</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800&display=swap');
-        
+
         :root {
             --primary: #3b82f6;
             --accent: #10b981;
@@ -16,23 +16,23 @@
             --bg: #020617;
         }
 
-        body { 
-            font-family: 'Pretendard', sans-serif; 
-            background-color: var(--bg); 
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: var(--bg);
             color: #f8fafc;
             overflow-x: hidden;
         }
 
-        .glass { 
-            background: rgba(15, 23, 42, 0.6); 
-            backdrop-filter: blur(12px); 
-            border: 1px solid rgba(255,255,255,0.08); 
+        .glass {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08);
         }
 
-        .gradient-text { 
-            background: linear-gradient(135deg, #60a5fa, #34d399); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .scan-ring {
@@ -67,22 +67,38 @@
 
         .view-transition { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .hidden { display: none; opacity: 0; transform: translateY(10px); }
-    </style>
+
+html {background:#101010;filter:grayscale(1)}
+body {background:#101010;color:#f5f4ef;font-family:Inter,"Malgun Gothic",sans-serif}
+nav.glass {background:#101010f5;border-bottom:1px solid #555}
+.glass {background:#1b1b1b;border-color:#454545;box-shadow:none;border-radius:12px}
+.view:not(.hidden){animation:enter .45s ease-out}
+@keyframes enter{from{opacity:0;transform:translateY(12px)}}
+.cover{display:grid;grid-template-columns:1.1fr 1fr;align-items:center;gap:4vw;padding:3vw 0 5vw}
+.cover h1{font:normal clamp(76px,8.8vw,144px)/.84 Georgia,serif;letter-spacing:-.075em}
+.cover h1 span{display:block;font-style:italic;color:#c7c6bf}
+.cover p{color:#c2c2c2;line-height:1.8;margin:28px 0}
+.primary,button.bg-blue-600{background:#f2f1ed!important;color:#141414!important;box-shadow:none}
+.primary{padding:14px 22px;border-radius:3px;font-weight:700}
+.primary span{margin-left:30px}
+button{transition:transform .18s,opacity .18s}button:hover{opacity:.85;transform:translateY(-2px)}
+.plate{position:relative;overflow:hidden;aspect-ratio:1.22;background:radial-gradient(ellipse,#deddd7,#a8a8a5);border-radius:2px;display:grid;place-items:center}
+.print{height:77%;width:60%;position:relative;transform:rotate(-22deg)}
+.print i{position:absolute;inset:calc(var(--n)*1.92%) calc(var(--n)*1.9%);border:1.4px solid #222;border-bottom-color:transparent;border-radius:48% 54% 41% 51%}
+.beam{position:absolute;inset:18% 7% auto;height:1px;background:white;box-shadow:0 0 8px white;animation:sweep 4s ease-in-out infinite alternate}
+@keyframes sweep{to{top:82%}}
+.directory{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.directory button{border-block:1px solid #555;padding:20px 0;text-align:left;font-weight:600}
+.directory b{float:right}
+#result-desc{overflow-wrap:anywhere;font-family:monospace}
+#nav-links.hidden,.view.hidden{display:none!important}
+#nav-links:not(.hidden){display:flex}
+#scan-init.drag{outline:2px dashed white}
+@media(max-width:700px){.cover{grid-template-columns:1fr;padding:0 0 24px}.plate{aspect-ratio:2}.cover p{margin:18px 0}.directory{gap:16px}nav.glass{height:auto;min-height:64px;flex-wrap:wrap;padding:12px 16px;gap:10px}#nav-links{gap:12px;flex-wrap:wrap}#scan-init,#scan-loading,#scan-result{padding:32px 16px}}
+@media(prefers-reduced-motion:reduce){*,*::after{animation:none!important;transition:none!important}}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
-
-    <!-- 글로벌 위협 알림 바 -->
-    <div class="bg-blue-600 text-white text-[10px] py-1 px-4 flex justify-between items-center font-bold tracking-widest uppercase overflow-hidden whitespace-nowrap">
-        <div class="flex gap-8 animate-marquee">
-            <span>LIVE THREAT LEVEL: STABLE</span>
-            <span>•</span>
-            <span>SYSTEM NODES: 14,291 ACTIVE</span>
-            <span>•</span>
-            <span>GLOBAL ATTACKS BLOCKED (24H): 1,294,012</span>
-            <span>•</span>
-            <span>AI ENGINE V4.0.2 OPERATIONAL</span>
-        </div>
-    </div>
 
     <!-- 네비게이션 -->
     <nav class="sticky top-0 w-full z-50 glass h-16 px-8 flex items-center justify-between border-b border-white/5">
@@ -92,78 +108,33 @@
             </div>
             <span class="text-xl font-black tracking-tighter">SECURE<span class="text-blue-500">DIGITAL</span></span>
         </div>
-        
+
         <div id="nav-links" class="hidden md:flex items-center gap-8">
             <button onclick="showView('dashboard')" class="text-sm font-semibold text-slate-400 hover:text-white transition-colors">대시보드</button>
-            <button onclick="showView('scan')" class="text-sm font-semibold text-slate-400 hover:text-white transition-colors">AI 정밀 검사</button>
+            <button onclick="showView('scan')" class="text-sm font-semibold text-slate-400 hover:text-white transition-colors">파일 지문 분석</button>
             <button onclick="showView('download')" class="text-sm font-semibold text-slate-400 hover:text-white transition-colors">앱 다운로드</button>
             <div class="h-4 w-[1px] bg-white/10 mx-2"></div>
             <button onclick="logout()" class="text-red-400 hover:text-red-300 text-sm"><i class="fas fa-power-off"></i></button>
         </div>
 
-        <button id="nav-login-btn" onclick="showView('auth')" class="bg-white text-black hover:bg-blue-50 px-6 py-2 rounded-xl text-sm font-extrabold transition-all">시작하기</button>
+        <button id="nav-login-btn" onclick="showView('auth')" class="bg-white text-black hover:bg-blue-50 px-6 py-2 rounded-xl text-sm font-extrabold transition-all">데모 열기</button>
     </nav>
 
     <main class="flex-grow pt-12 pb-20 px-6 max-w-7xl mx-auto w-full">
-        
+
         <!-- 1. 랜딩 페이지 -->
-        <section id="view-landing" class="view flex flex-col items-center text-center py-16 space-y-10">
-            <div class="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                <span class="text-[11px] font-bold text-slate-300 tracking-wider">VERSION 4.0 LIVE NOW</span>
-            </div>
-            
-            <h1 class="text-6xl md:text-8xl font-black leading-tight tracking-tighter">
-                보안을 넘어선<br><span class="gradient-text">지능형 보호의 완성</span>
-            </h1>
-            
-            <p class="text-slate-400 text-lg md:text-xl max-w-3xl leading-relaxed">
-                단순 탐지를 넘어 예측하고 격리합니다. 전 세계 위협 데이터를 실시간 분석하는 <br class="hidden md:block">
-                SecureDigital AI 엔진으로 가장 완벽한 보안 환경을 구축하세요.
-            </p>
-            
-            <div class="flex flex-col sm:flex-row gap-5 w-full justify-center pt-6">
-                <button onclick="showView('auth')" class="bg-blue-600 hover:bg-blue-500 px-12 py-5 rounded-2xl text-xl font-bold shadow-2xl shadow-blue-600/40 transform hover:-translate-y-1 transition-all">
-                    무료 보안 검사 시작
-                </button>
-                <button onclick="showView('download')" class="glass hover:bg-white/5 px-12 py-5 rounded-2xl text-xl font-bold flex items-center justify-center gap-3 transition-all">
-                    <i class="fas fa-desktop text-blue-400"></i> 앱 다운로드
-                </button>
-            </div>
-
-            <!-- 간단 통계 -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 pt-20 w-full max-w-4xl opacity-60">
-                <div><div class="text-3xl font-black">99.9%</div><div class="text-xs text-slate-500">탐지 정확도</div></div>
-                <div><div class="text-3xl font-black">0.02s</div><div class="text-xs text-slate-500">분석 속도</div></div>
-                <div><div class="text-3xl font-black">1.2M+</div><div class="text-xs text-slate-500">차단된 위협</div></div>
-                <div><div class="text-3xl font-black">24/7</div><div class="text-xs text-slate-500">실시간 모니터링</div></div>
-            </div>
-        </section>
-
-        <!-- 2. 로그인/회원가입 -->
+        <section id="view-landing" class="view">
+  <div class="cover">
+    <div class="cover-copy"><h1>Secure<span>Digital.</span></h1>
+    <p>파일의 디지털 지문을 확인하세요.<br>내 브라우저에서 직접 계산하는 SHA-256 분석.</p>
+    <button class="primary" onclick="showView('scan')">파일 분석 시작 <span aria-hidden="true">↗</span></button></div>
+    <div class="plate" aria-hidden="true"><div class="print"><i style="--n:0"></i><i style="--n:1"></i><i style="--n:2"></i><i style="--n:3"></i><i style="--n:4"></i><i style="--n:5"></i><i style="--n:6"></i><i style="--n:7"></i><i style="--n:8"></i><i style="--n:9"></i><i style="--n:10"></i><i style="--n:11"></i><i style="--n:12"></i><i style="--n:13"></i><i style="--n:14"></i><i style="--n:15"></i><i style="--n:16"></i><i style="--n:17"></i><i style="--n:18"></i><i style="--n:19"></i><i style="--n:20"></i><i style="--n:21"></i><i style="--n:22"></i><i style="--n:23"></i></div><div class="beam"></div></div>
+  </div><div class="directory"><button onclick="showView('dashboard')">관제 대시보드 <b>↗</b></button><button onclick="showView('download')">클라이언트 안내 <b>↗</b></button></div>
+</section>
+<!-- 2. 로그인/회원가입 -->
         <section id="view-auth" class="view hidden max-w-lg mx-auto py-12">
             <div class="glass p-10 rounded-[2.5rem] border-white/10 shadow-2xl">
-                <div class="flex p-1.5 bg-black/40 rounded-2xl mb-10">
-                    <button id="btn-tab-login" onclick="setAuthMode('login')" class="flex-1 py-3 font-bold rounded-xl bg-blue-600 transition-all">로그인</button>
-                    <button id="btn-tab-signup" onclick="setAuthMode('signup')" class="flex-1 py-3 font-bold rounded-xl text-slate-500 hover:text-white transition-all">회원가입</button>
-                </div>
-                
-                <form onsubmit="handleAuth(event)" class="space-y-6">
-                    <div class="space-y-2">
-                        <label class="text-xs font-bold text-slate-500 ml-1 uppercase tracking-widest">Email Address</label>
-                        <input type="email" id="auth-email" placeholder="name@company.com" class="w-full bg-slate-900 border border-white/5 rounded-2xl px-5 py-4 outline-none focus:border-blue-500 focus:ring-1 ring-blue-500/20 transition-all" required>
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-xs font-bold text-slate-500 ml-1 uppercase tracking-widest">Password</label>
-                        <input type="password" id="auth-password" placeholder="••••••••" class="w-full bg-slate-900 border border-white/5 rounded-2xl px-5 py-4 outline-none focus:border-blue-500 focus:ring-1 ring-blue-500/20 transition-all" required>
-                    </div>
-                    <button type="submit" class="w-full py-5 bg-blue-600 hover:bg-blue-500 rounded-2xl font-black text-lg shadow-xl shadow-blue-600/20 mt-4">
-                        계정 접속
-                    </button>
-                </form>
+                <h2 class="text-3xl mb-5">데모 대시보드 열기</h2><form onsubmit="handleAuth(event)" class="space-y-6"><label for="auth-email">표시 이름</label><input id="auth-email" maxlength="40" placeholder="게스트" class="w-full bg-neutral-800 px-4 py-3 rounded"><button class="primary">대시보드 열기</button></form>
             </div>
         </section>
 
@@ -171,8 +142,8 @@
         <section id="view-dashboard" class="view hidden space-y-10">
             <header class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
                 <div>
-                    <h2 class="text-4xl font-black">시스템 관제 센터</h2>
-                    <p id="user-welcome" class="text-slate-500 mt-1">인증됨: AI 기반 실시간 보호가 작동 중입니다.</p>
+                    <h2 class="text-4xl font-black">관제 데모</h2>
+                    <p id="user-welcome" class="text-slate-500 mt-1">관제 지표는 예시이며, 검사 기록은 이번 방문의 실제 결과입니다.</p>
                 </div>
                 <div class="flex gap-3">
                     <div class="glass px-4 py-2 rounded-xl flex items-center gap-3">
@@ -182,11 +153,11 @@
                         </span>
                     </div>
                     <button onclick="showView('scan')" class="bg-blue-600 hover:bg-blue-500 px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg">
-                        <i class="fas fa-bolt mr-2"></i> 정밀 스캔 실행
+                        <i class="fas fa-bolt mr-2"></i> 파일 분석
                     </button>
                 </div>
             </header>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div class="glass p-8 rounded-[2rem] border-l-4 border-l-blue-500">
                     <h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">오늘의 보호 시간</h3>
@@ -194,7 +165,7 @@
                 </div>
                 <div class="glass p-8 rounded-[2rem]">
                     <h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">검사된 개체</h3>
-                    <p id="scan-count" class="text-3xl font-black tracking-tight">41,294</p>
+                    <p id="scan-count" class="text-3xl font-black tracking-tight">0</p>
                 </div>
                 <div class="glass p-8 rounded-[2rem]">
                     <h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">차단된 프로세스</h3>
@@ -210,7 +181,7 @@
                 <!-- 위협 시각화 가짜 지도 위젯 -->
                 <div class="lg:col-span-2 glass rounded-[2.5rem] p-8 min-h-[400px] relative overflow-hidden">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="font-bold flex items-center gap-2"><i class="fas fa-globe-americas text-blue-500"></i> 글로벌 위협 맵 (Live)</h3>
+                        <h3 class="font-bold flex items-center gap-2"><i class="fas fa-globe-americas text-blue-500"></i> 글로벌 위협 맵 (예시)</h3>
                         <div class="text-[10px] font-mono text-slate-500">RELAY: SEOUL_NODE_01</div>
                     </div>
                     <div class="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
@@ -245,8 +216,8 @@
         <!-- 4. 파일 검사 (시뮬레이션 고도화) -->
         <section id="view-scan" class="view hidden max-w-3xl mx-auto text-center space-y-12 py-10">
             <div class="space-y-4">
-                <h2 class="text-5xl font-black">AI 정밀 분석 엔진</h2>
-                <p class="text-slate-400 text-lg">파일 해시, 행위 분석 및 샌드박스 실행을 통해 99.9%의 정확도로 검사합니다.</p>
+                <h2 class="text-5xl font-black">파일 지문 분석</h2>
+                <p class="text-slate-400 text-lg">파일을 외부로 전송하지 않고 SHA-256 지문을 계산합니다.</p>
             </div>
 
             <!-- 대기 상태 -->
@@ -256,33 +227,18 @@
                     <i class="fas fa-file-shield text-5xl text-blue-500"></i>
                 </div>
                 <h3 class="text-2xl font-extrabold mb-3">검사할 파일을 선택하세요</h3>
-                <p class="text-slate-500">파일을 드래그하거나 클릭하여 업로드 (최대 500MB)</p>
+                <p class="text-slate-500">파일을 드래그하거나 클릭하여 선택 (최대 64 MiB)</p>
             </div>
 
             <!-- 스캔 중 상세 시뮬레이션 -->
             <div id="scan-loading" class="hidden glass p-16 rounded-[3rem] space-y-10">
                 <div class="flex justify-center">
                     <div class="scan-ring">
-                        <span id="scan-percent" class="text-3xl font-black tracking-tighter text-blue-500">0%</span>
+                        <span id="scan-percent" class="text-3xl font-black tracking-tighter text-blue-500">분석 중</span>
                     </div>
                 </div>
-                <div class="max-w-md mx-auto space-y-3">
-                    <div class="flex justify-between text-xs font-mono mb-1">
-                        <span id="scan-status-text" class="text-blue-400">엔진 초기화 중...</span>
-                        <span class="text-slate-500" id="scan-file-name">filename.exe</span>
-                    </div>
-                    <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                        <div id="scan-bar" class="bg-blue-600 h-full transition-all duration-300" style="width: 0%"></div>
-                    </div>
-                </div>
-                <!-- 단계별 체크리스트 -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-[10px] font-bold tracking-widest uppercase">
-                    <div id="step-1" class="p-3 border border-white/5 rounded-xl opacity-30">1. 해시 분석</div>
-                    <div id="step-2" class="p-3 border border-white/5 rounded-xl opacity-30">2. 샌드박스 실행</div>
-                    <div id="step-3" class="p-3 border border-white/5 rounded-xl opacity-30">3. AI 휴리스틱</div>
-                </div>
+                <p id="scan-file-name"></p>
             </div>
-
             <!-- 결과 출력 -->
             <div id="scan-result" class="hidden glass p-12 rounded-[3rem] border-2 transition-all">
                 <div id="result-badge" class="inline-flex items-center gap-2 px-4 py-1 rounded-full mb-6 text-xs font-black uppercase tracking-tighter"></div>
@@ -290,7 +246,7 @@
                 <h3 id="result-title" class="text-3xl font-black mb-4 tracking-tight"></h3>
                 <p id="result-desc" class="text-slate-400 mb-10 leading-relaxed max-w-md mx-auto"></p>
                 <div class="flex gap-4 max-w-sm mx-auto">
-                    <button onclick="resetScan()" class="flex-1 py-4 glass hover:bg-white/5 rounded-2xl font-bold">대시보드</button>
+                    <button onclick="resetScan('dashboard')" class="flex-1 py-4 glass hover:bg-white/5 rounded-2xl font-bold">대시보드</button>
                     <button onclick="resetScan()" class="flex-1 py-4 bg-blue-600 hover:bg-blue-500 rounded-2xl font-bold">다른 파일 검사</button>
                 </div>
             </div>
@@ -322,9 +278,7 @@
                         <li class="flex items-center gap-3"><i class="fas fa-check text-blue-500"></i> 샌드박스 보안 실행 환경 제공</li>
                         <li class="flex items-center gap-3"><i class="fas fa-check text-blue-500"></i> 시스템 성능 최적화(게임 모드)</li>
                     </ul>
-                    <button onclick="mockDownload()" class="w-full py-5 bg-blue-600 hover:bg-blue-500 rounded-2xl font-black text-xl shadow-xl shadow-blue-600/20 transition-all flex items-center justify-center gap-3">
-                        <i class="fas fa-download"></i> Installer (.exe) 받기
-                    </button>
+                    <button disabled class="w-full py-5 bg-blue-600 hover:bg-blue-500 rounded-2xl font-black text-xl shadow-xl shadow-blue-600/20 transition-all flex items-center justify-center gap-3">배포 준비 중</button>
                     <p class="text-center text-[10px] text-slate-600 mt-4 font-mono">MD5: F3E2A1B0C9D8E7F6A5B4C3D2E1F0A9B8</p>
                 </div>
 
@@ -355,18 +309,8 @@
     <script>
         // 화면 전환 로직
         function showView(viewId) {
-            document.querySelectorAll('.view').forEach(v => {
-                v.classList.add('hidden');
-                setTimeout(() => v.style.display = 'none', 400);
-            });
-            
-            setTimeout(() => {
-                const target = document.getElementById(`view-${viewId}`);
-                target.style.display = viewId === 'landing' ? 'flex' : 'block';
-                setTimeout(() => target.classList.remove('hidden'), 50);
-            }, 400);
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.querySelectorAll('.view').forEach(view => view.classList.toggle('hidden', view.id !== 'view-' + viewId));
+            window.scrollTo(0,0);
         }
 
         // 로그인 전환
@@ -381,7 +325,7 @@
             const email = document.getElementById('auth-email').value;
             document.getElementById('nav-links').classList.remove('hidden');
             document.getElementById('nav-login-btn').classList.add('hidden');
-            document.getElementById('user-welcome').innerText = `접속 계정: ${email} (보안 등급: Level 1)`;
+            document.getElementById('user-welcome').innerText = `${email || "게스트"} · 관제 지표는 예시이며 검사 기록은 이번 방문의 결과입니다.`;
             showView('dashboard');
         }
 
@@ -394,107 +338,52 @@
         // 정밀 스캔 로직
         function triggerFileInput() { document.getElementById('scan-input').click(); }
 
-        function runScan(files) {
-            if (!files.length) return;
+        const byId = id => document.getElementById(id);
+        const drop = byId('scan-init');
+        drop.tabIndex = 0;
+        drop.setAttribute('role','button');
+        drop.onkeydown = e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); triggerFileInput(); }
+        };
+        drop.ondragover = e => {e.preventDefault(); drop.classList.add('drag');};
+        drop.ondragleave = () => drop.classList.remove('drag');
+        drop.ondrop = e => {e.preventDefault(); drop.classList.remove('drag'); runScan(e.dataTransfer.files);};
+        let working = false;
+        async function runScan(files) {
+            if (working || !files.length) return;
             const file = files[0];
-            document.getElementById('scan-file-name').innerText = file.name;
-            document.getElementById('scan-init').classList.add('hidden');
-            document.getElementById('scan-loading').classList.remove('hidden');
-
-            let progress = 0;
-            const statusTexts = [
-                "엔진 초기화 중...", 
-                "해시값 계산 및 DB 대조 중...", 
-                "코드 서명 검증 중...", 
-                "가상 샌드박스에서 실행 분석 중...", 
-                "AI 휴리스틱 결과 산출 중..."
-            ];
-
-            const interval = setInterval(() => {
-                progress += Math.floor(Math.random() * 8) + 2;
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(interval);
-                    setTimeout(() => showResult(file.name), 800);
-                }
-                
-                document.getElementById('scan-percent').innerText = `${progress}%`;
-                document.getElementById('scan-bar').style.width = `${progress}%`;
-                
-                // 텍스트 및 단계 업데이트
-                const statusIdx = Math.floor((progress / 100) * statusTexts.length);
-                document.getElementById('scan-status-text').innerText = statusTexts[statusIdx] || statusTexts[statusTexts.length-1];
-                
-                if (progress > 30) document.getElementById('step-1').classList.add('opacity-100', 'text-blue-500', 'border-blue-500/30');
-                if (progress > 60) document.getElementById('step-2').classList.add('opacity-100', 'text-blue-500', 'border-blue-500/30');
-                if (progress > 90) document.getElementById('step-3').classList.add('opacity-100', 'text-blue-500', 'border-blue-500/30');
-            }, 150);
-        }
-
-        function showResult(filename) {
-            document.getElementById('scan-loading').classList.add('hidden');
-            const resultBox = document.getElementById('scan-result');
-            resultBox.classList.remove('hidden');
-
-            const isThreat = Math.random() > 0.8;
-            const icon = document.getElementById('result-icon');
-            const title = document.getElementById('result-title');
-            const desc = document.getElementById('result-desc');
-            const badge = document.getElementById('result-badge');
-
-            if (isThreat) {
-                resultBox.style.borderColor = 'rgba(239, 68, 68, 0.4)';
-                badge.className = 'inline-flex items-center gap-2 px-4 py-1 rounded-full mb-6 text-xs font-black uppercase tracking-tighter bg-red-500/20 text-red-500';
-                badge.innerText = 'Threat Detected';
-                icon.className = 'fas fa-biohazard text-red-500 text-7xl mb-8 block pulse-red rounded-full';
-                title.innerText = '악성 코드 감지됨';
-                title.className = 'text-3xl font-black mb-4 tracking-tight text-red-500';
-                desc.innerText = `${filename} 에서 변종 트로이목마(Trojan.Gen) 패턴이 분석되었습니다. 이 파일은 시스템 권한을 탈취할 위험이 있습니다.`;
-                addLog(filename, '위험', 'red');
-            } else {
-                resultBox.style.borderColor = 'rgba(16, 185, 129, 0.4)';
-                badge.className = 'inline-flex items-center gap-2 px-4 py-1 rounded-full mb-6 text-xs font-black uppercase tracking-tighter bg-emerald-500/20 text-emerald-400';
-                badge.innerText = 'System Verified';
-                icon.className = 'fas fa-shield-check text-emerald-500 text-7xl mb-8 block';
-                title.innerText = '파일 분석 완료: 안전';
-                title.className = 'text-3xl font-black mb-4 tracking-tight text-emerald-400';
-                desc.innerText = `${filename} 분석 결과 위협 요소가 발견되지 않았습니다. AI 엔진이 해당 파일을 안전한 것으로 분류했습니다.`;
-                addLog(filename, '안전', 'emerald');
+            if(file.size > 64 * 1024 * 1024){alert('64 MiB 이하의 파일을 선택하세요.');return;}
+            working = true;
+            drop.classList.add('hidden');
+            byId('scan-loading').classList.remove('hidden');
+            byId('scan-file-name').textContent = file.name;
+            try {
+                const hash = await crypto.subtle.digest('SHA-256', await file.arrayBuffer());
+                byId('result-title').textContent = file.name;
+                byId('result-badge').textContent = 'SHA-256';
+                byId('result-desc').textContent = Array.from(new Uint8Array(hash), b => b.toString(16).padStart(2,'0')).join('');
+                const list = byId('log-list');
+                if (!list.dataset.started) {list.replaceChildren(); list.dataset.started = '1';}
+                const row = document.createElement('p');
+                row.className = 'p-5 border-b border-white/10';
+                row.textContent = file.name + ' · ' + new Date().toLocaleTimeString('ko-KR');
+                list.prepend(row);
+                byId('scan-count').textContent = list.children.length;
+            } catch {
+                byId('result-title').textContent = '파일을 읽지 못했습니다';
+                byId('result-badge').textContent = '';
+                byId('result-desc').textContent = 'HTTPS 연결을 확인하고 파일을 다시 선택하세요.';
+            } finally {
+                working = false;
+                byId('scan-loading').classList.add('hidden');
+                byId('scan-result').classList.remove('hidden');
+                byId('scan-input').value = '';
             }
         }
-
-        function resetScan() {
-            document.getElementById('scan-result').classList.add('hidden');
-            document.getElementById('scan-init').classList.remove('hidden');
-            document.getElementById('scan-percent').innerText = '0%';
-            document.getElementById('scan-bar').style.width = '0%';
-            document.querySelectorAll('[id^="step-"]').forEach(el => el.className = 'p-3 border border-white/5 rounded-xl opacity-30');
-            showView('dashboard');
-        }
-
-        function addLog(name, status, color) {
-            const list = document.getElementById('log-list');
-            if (list.innerText.includes('로그가 존재하지 않습니다')) list.innerHTML = '';
-            
-            const div = document.createElement('div');
-            div.className = 'p-5 flex justify-between items-center hover:bg-white/5 transition-all animate-in slide-in-from-right-4';
-            div.innerHTML = `
-                <div class="flex items-center gap-4">
-                    <div class="p-2 bg-white/5 rounded-lg text-slate-500">
-                        <i class="fas ${status === '위험' ? 'fa-virus' : 'fa-file-shield'}"></i>
-                    </div>
-                    <div>
-                        <div class="text-sm font-bold truncate max-w-[150px]">${name}</div>
-                        <div class="text-[9px] font-mono text-slate-600 uppercase">${new Date().toLocaleTimeString()} • SCAN_ID: ${Math.random().toString(36).substr(2, 9)}</div>
-                    </div>
-                </div>
-                <div class="text-[10px] font-black px-2 py-1 rounded bg-${color}-500/20 text-${color}-400 uppercase tracking-tighter border border-${color}-500/30">${status}</div>
-            `;
-            list.prepend(div);
-            
-            const countEl = status === '위험' ? 'threat-count' : 'scan-count';
-            const el = document.getElementById(countEl);
-            el.innerText = (parseInt(el.innerText.replace(/,/g, '')) + 1).toLocaleString();
+        function resetScan(view = 'scan') {
+            byId('scan-result').classList.add('hidden');
+            drop.classList.remove('hidden');
+            showView(view);
         }
 
         function mockDownload() {
